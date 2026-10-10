@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "campus-customs": {
+      "type": "stdio",
+      "command": "${CLAUDE_PROJECT_DIR:-.}/.venv/bin/python",
+      "args": ["${CLAUDE_PROJECT_DIR:-.}/mcp_server/server.py"],
+      "env": {}
+    }
+  }
+}

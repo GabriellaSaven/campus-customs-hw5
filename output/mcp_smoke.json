@@ -1,0 +1,213 @@
+{
+  "run_at": "2026-10-10T10:54:30",
+  "transport": "stdio, launched from .mcp.json",
+  "mcp_server": "campus-customs",
+  "database": "data/campus_customs_new.db",
+  "tools_listed_by_server": [
+    "add_board_note",
+    "add_human_note",
+    "check_discount_margin",
+    "check_stock",
+    "check_vendor_status",
+    "draft_customer_message",
+    "draft_purchase_order",
+    "get_cash_position",
+    "get_invoice",
+    "get_lease_rent_status",
+    "get_ticket",
+    "get_today",
+    "list_inventory",
+    "list_open_tickets",
+    "list_payment_requests",
+    "list_tickets",
+    "list_vendors",
+    "pay_approved_request",
+    "reject_payment_request",
+    "request_payment",
+    "reset_shop_database",
+    "resolve_ticket",
+    "set_ticket_status"
+  ],
+  "all_tools_match_database": true,
+  "tests": [
+    {
+      "ticket_id": 101,
+      "prompt": "Ticket 101: Tauhid Zaman wants 1 Classic Bulldog Tee in size S. How many do we have on hand, and is there a shortfall?",
+      "tool": "check_stock",
+      "arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "qty_needed": 1
+      },
+      "db_sql": "SELECT qty, name, location FROM inventory WHERE sku = ? AND size = ?",
+      "tool_output": {
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "location": "Aisle B",
+        "on_hand": 0,
+        "qty_needed": 1,
+        "shortfall": 1,
+        "can_fill_from_stock": false
+      },
+      "database_check": {
+        "on_hand": {
+          "database": 0,
+          "tool": 0,
+          "match": true
+        },
+        "name": {
+          "database": "Classic Bulldog Tee",
+          "tool": "Classic Bulldog Tee",
+          "match": true
+        },
+        "location": {
+          "database": "Aisle B",
+          "tool": "Aisle B",
+          "match": true
+        },
+        "shortfall": {
+          "database": 1,
+          "tool": 1,
+          "match": true
+        }
+      },
+      "all_match": true
+    },
+    {
+      "ticket_id": 102,
+      "prompt": "Ticket 102: Elm City Properties says rent is due. How much is the rent on lease 1, when is it due, is it overdue, and can our cash cover it?",
+      "tool": "get_lease_rent_status",
+      "arguments": {
+        "lease_id": 1
+      },
+      "db_sql": "SELECT * FROM leases WHERE id = ?; SELECT date_today FROM desk; SELECT balance FROM cash_accounts WHERE name = 'checking'",
+      "tool_output": {
+        "lease_id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400.0,
+        "next_due": "2026-10-02",
+        "today": "2026-08-31",
+        "days_until_due": 32,
+        "is_overdue": false,
+        "notes": null,
+        "cash_accounts": [
+          {
+            "name": "checking",
+            "balance": 160.0,
+            "as_of": "2026-08-31"
+          }
+        ],
+        "any_account_covers_rent": false
+      },
+      "database_check": {
+        "monthly_rent": {
+          "database": 2400.0,
+          "tool": 2400.0,
+          "match": true
+        },
+        "landlord": {
+          "database": "Elm City Properties",
+          "tool": "Elm City Properties",
+          "match": true
+        },
+        "next_due": {
+          "database": "2026-10-02",
+          "tool": "2026-10-02",
+          "match": true
+        },
+        "today": {
+          "database": "2026-08-31",
+          "tool": "2026-08-31",
+          "match": true
+        },
+        "days_until_due": {
+          "database": 32,
+          "tool": 32,
+          "match": true
+        },
+        "is_overdue": {
+          "database": false,
+          "tool": false,
+          "match": true
+        },
+        "checking_balance": {
+          "database": 160.0,
+          "tool": 160.0,
+          "match": true
+        },
+        "any_account_covers_rent": {
+          "database": false,
+          "tool": false,
+          "match": true
+        }
+      },
+      "all_match": true
+    },
+    {
+      "ticket_id": 103,
+      "prompt": "Ticket 103: Yale AI Club wants 20 CC-HOOD-NAVY hoodies and is asking for a bulk discount. What margin do we keep at 10% off list?",
+      "tool": "check_discount_margin",
+      "arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "discount_pct": 10.0
+      },
+      "db_sql": "SELECT unit_cost, list_price FROM pricing WHERE sku = ?",
+      "tool_output": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "discount_pct": 10.0,
+        "unit_price": 52.2,
+        "unit_margin": 30.2,
+        "margin_pct": 57.9,
+        "total_price": 1044.0,
+        "total_cost": 440.0,
+        "total_margin": 604.0,
+        "below_cost": false,
+        "max_discount_pct_at_breakeven": 62.1
+      },
+      "database_check": {
+        "unit_cost": {
+          "database": 22.0,
+          "tool": 22.0,
+          "match": true
+        },
+        "list_price": {
+          "database": 58.0,
+          "tool": 58.0,
+          "match": true
+        },
+        "unit_price": {
+          "database": 52.2,
+          "tool": 52.2,
+          "match": true
+        },
+        "unit_margin": {
+          "database": 30.2,
+          "tool": 30.2,
+          "match": true
+        },
+        "total_price": {
+          "database": 1044.0,
+          "tool": 1044.0,
+          "match": true
+        },
+        "total_cost": {
+          "database": 440.0,
+          "tool": 440.0,
+          "match": true
+        },
+        "total_margin": {
+          "database": 604.0,
+          "tool": 604.0,
+          "match": true
+        }
+      },
+      "all_match": true
+    }
+  ]
+}
