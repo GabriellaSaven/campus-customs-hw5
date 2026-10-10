@@ -486,3 +486,34 @@ to two question titles, and dropped the stray word "harness". After the follow-u
 tab shows only my exact question wording and my paragraphs in my order (kept in
 `scripts/reflection_answers.py`). A script check confirms all 5 questions and 22
 paragraphs match character for character.
+
+## Problem 11: Submit to GitHub
+
+### Initial prompt
+
+Problem 11: Submit to GitHub. I now need to push my code to a public github repository
+so that the graders can clone it. I will submit the link to the repo to Canvas and also
+put it in output/github_url.txt. As always, don't push my real .env to the GitHub repo
+but do include both database files under /data (both the original and working copy) so
+that the graders can run the app easily. README should explain: copy the original
+database to the working copy when you need a clean run, start the MCP server, start
+FastAPI backend, start the React board, reset the database before a full three-ticket
+run. The layout of my files should be as follows: [screenshot of the hw5/ tree: root
+files AI_prompts.md, requirements.txt, .env.example, .gitignore, .mcp.json, README.md;
+data/ with both databases; mcp_server/ with server.py and README.md; frontend/;
+backend/ with main.py, models.py and prompts/ (five agent files); output/ with
+harness.md, mcp_smoke.json, desk_tickets.html, design.md, resolved_tickets.json,
+resolved_board.html, audit_trail.json, github_url.txt].
+
+### Follow-up prompt
+
+No follow-up prompt was used.
+
+**What was lacking after the initial prompt:** The repo name wasn't given, so I followed
+the Homework 4 pattern (`GabriellaSaven/campus-customs-hw5`). The layout screenshot
+showed only the minimum backend files, but the app also needs `agents.py`, `config.py`,
+`mcp_client.py`, `audit.py` and `run_team.py`, so those were kept, along with `scripts/`,
+`tests/` and `output/screenshots/` (`resolved_board.html` links to them). The README
+lists them all. Before publishing, every staged file was scanned for the real Portkey
+key (not found), and a fresh clone was tested from scratch (install, MCP smoke test,
+prompt/tool check, frontend build).
